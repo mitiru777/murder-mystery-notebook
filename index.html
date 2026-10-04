@@ -5,104 +5,105 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>マダミス・ノート</title>
 <style>
-:root{--bg:#f4f5f7;--card:#fff;--line:#dfe1e5;--text:#202124;--muted:#70757a;--accent:#3f51b5;--danger:#b3261e}
-*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Sans","Noto Sans JP",sans-serif}
-button,input,textarea,select{font:inherit}button{border:1px solid var(--line);background:#fff;border-radius:9px;padding:8px 11px;cursor:pointer}button:active{transform:translateY(1px)}
-header{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid var(--line);padding:9px 10px env(safe-area-inset-top);box-shadow:0 1px 4px #0000000a}
-.headrow{display:flex;gap:7px;align-items:center}.title{font-weight:800;white-space:nowrap}.status{margin-left:auto;color:var(--muted);font-size:11px;white-space:nowrap}
-.workbar{display:flex;gap:6px;margin-top:8px;overflow-x:auto;padding-bottom:2px}.workbar button{white-space:nowrap}.workbar .active{background:#222;color:#fff;border-color:#222}
-.layout{max-width:1400px;margin:auto;padding:12px}.tabs{display:flex;gap:6px;overflow-x:auto;margin-bottom:10px}.tab{display:flex;align-items:center;gap:4px;white-space:nowrap}.tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
-main{min-width:0}.view{display:none}.view.active{display:block}h2{font-size:20px;margin:5px 0 12px}.hint{font-size:12px;color:var(--muted)}
-.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px}.toolbar{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
-.tablewrap{overflow:auto;border-radius:9px;border:1px solid var(--line)}table{border-collapse:collapse;width:max(100%,900px);background:#fff}th,td{border-bottom:1px solid var(--line);border-right:1px solid var(--line);padding:7px;vertical-align:top}th{background:#f1f2f4;font-size:12px;position:sticky;top:0;z-index:1}td[contenteditable]{min-width:90px;outline:none}td[contenteditable]:focus{box-shadow:inset 0 0 0 2px var(--accent);background:#fafbff}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:10px}.character h3{margin:0;font-size:17px}.row{display:flex;gap:7px;align-items:center;flex-wrap:wrap}.grow{flex:1}.full{width:100%}label{display:block;font-size:12px;color:#555;margin:7px 0 4px}input,textarea,select{border:1px solid #cfd2d7;border-radius:8px;padding:8px;background:#fff;width:100%}textarea{min-height:90px;resize:vertical}.danger{color:var(--danger)}.mini{font-size:11px;color:var(--muted)}
-details{background:#fff;border:1px solid var(--line);border-radius:10px;margin:8px 0;overflow:hidden}summary{padding:11px;font-weight:700;cursor:pointer;list-style:none}summary::-webkit-details-marker{display:none}.detailsbody{padding:0 11px 11px}
-.badge{display:inline-block;font-size:10px;padding:3px 6px;border-radius:999px;background:#eee;margin-right:4px}.link{color:var(--accent);text-decoration:underline;cursor:pointer}
-.empty{padding:25px;text-align:center;color:var(--muted);border:1px dashed #bbb;border-radius:10px}
-@media(max-width:650px){select{min-height:38px}header{padding-left:8px;padding-right:8px}.title{font-size:14px}.status{display:none}.layout{padding:8px}.card{padding:9px}.grid{grid-template-columns:1fr}h2{font-size:18px}.toolbar button{padding:7px 9px}.tabs{margin-bottom:7px}th,td{padding:6px;font-size:12px}}
+:root{--bg:#080808;--panel:#111;--panel2:#171717;--line:#343434;--text:#f4d84a;--soft:#d7c45a;--muted:#9b9466;--accent:#ffd900;--danger:#ff6868;--white:#fff8c7}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Sans","Noto Sans JP",sans-serif}body{min-height:100vh}
+button,input,textarea,select{font:inherit}button{border:1px solid var(--line);background:#151515;color:var(--text);border-radius:9px;padding:9px 12px;cursor:pointer}button:active{transform:translateY(1px)}button:hover{border-color:#766b27}.primary{background:var(--accent);color:#111;border-color:var(--accent);font-weight:800}.danger{color:var(--danger)}
+header{position:sticky;top:0;z-index:30;background:#090909;border-bottom:1px solid #2e2a12;padding:10px 10px env(safe-area-inset-top);box-shadow:0 2px 14px #000}.headrow{display:flex;gap:8px;align-items:center}.title{font-weight:900;font-size:16px;white-space:nowrap}.status{margin-left:auto;color:var(--muted);font-size:11px;white-space:nowrap}.workbar,.tabs{display:flex;gap:6px;overflow-x:auto;padding:7px 0 2px}.workbar button,.tabs button{white-space:nowrap}.tab.active{background:var(--accent);color:#111;border-color:var(--accent);font-weight:800}
+.layout{max-width:1500px;margin:auto;padding:10px}.view{display:none}.view.active{display:block}h2{font-size:21px;margin:7px 0 4px}.sub{color:var(--muted);font-size:12px;margin-bottom:10px}.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px;margin-bottom:10px}.toolbar{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin:9px 0}.hint{color:var(--muted);font-size:12px}.grow{flex:1}.row{display:flex;gap:7px;align-items:center;flex-wrap:wrap}
+.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:11px;background:#0d0d0d}table{border-collapse:separate;border-spacing:0;width:max(100%,1250px);background:#0d0d0d}th,td{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:7px;vertical-align:top}th{background:#1b1b1b;color:var(--accent);font-size:12px;position:sticky;top:0;z-index:4;white-space:nowrap}td{min-width:100px}tr:hover td{background:#121212}.timeCell{min-width:105px}.placeCell{min-width:125px}.eventCell{min-width:260px}.sourceCell{min-width:150px}.noteCell{min-width:180px}.edit{background:#0e0e0e;border:1px solid #292929;border-radius:7px;color:var(--white);padding:7px;width:100%;outline:none}.edit:focus{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}textarea.edit{min-height:72px;resize:vertical}
+.eventToggle{display:flex;align-items:center;justify-content:space-between;gap:8px;color:var(--white);font-weight:700;cursor:pointer}.eventBody{margin-top:7px}.collapsed .eventBody{display:none}.collapseBtn{font-size:11px;color:var(--soft);padding:4px 7px}.chips{display:flex;gap:5px;overflow-x:auto;padding:2px 0 5px;max-width:360px}.chip{flex:0 0 auto;border:1px solid #4a4318;background:#161616;color:#bdb36d;border-radius:999px;padding:6px 9px;font-size:12px;white-space:nowrap}.chip.on{background:var(--accent);border-color:var(--accent);color:#111;font-weight:800}.personBox{min-width:310px}.personLabel{font-size:10px;color:var(--muted);margin:2px 0}.peopleSummary{color:var(--white);font-size:12px;min-height:18px}.selectSmall{background:#0e0e0e;color:var(--white);border:1px solid #303030;border-radius:7px;padding:7px;width:100%}
+.matrix{margin-top:10px}.matrix .tablewrap{max-height:65vh}.matrix table{width:max-content}.matrix th,.matrix td{text-align:center;min-width:70px}.matrix th:first-child,.matrix td:first-child{position:sticky;left:0;background:#151515;z-index:3;text-align:left;min-width:90px}.matrix th:first-child{z-index:5}.presence{font-weight:900;font-size:18px;cursor:pointer;color:#3d3d3d}.presence.on{color:var(--accent)}
+.notice{border-left:3px solid var(--accent);background:#14120a;padding:9px 11px;color:#d6c96e;font-size:12px;border-radius:5px;margin:8px 0}.empty{padding:30px;text-align:center;color:var(--muted);border:1px dashed #49431f;border-radius:10px}
+.evidenceGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:9px}.eCard{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}.eHead{padding:10px;background:#171717;display:flex;gap:7px;align-items:center}.eHead strong{color:var(--white);flex:1}.eBody{padding:10px}.badge{font-size:10px;border:1px solid #645b20;border-radius:999px;padding:3px 7px;color:var(--accent)}label{display:block;font-size:11px;color:var(--muted);margin:8px 0 4px}.eBody input,.eBody textarea,.eBody select{width:100%;background:#0d0d0d;color:var(--white);border:1px solid #333;border-radius:7px;padding:8px}.eBody textarea{min-height:110px}.eCard.collapsed .eBody{display:none}.eCard.collapsed .collapseMark{transform:rotate(-90deg)}.collapseMark{transition:.15s}.characterGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:9px}.characterCard{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:10px}.characterCard h3{margin:0;color:var(--white)}.stat{color:var(--accent);font-weight:800}.miniList{margin-top:8px;border-top:1px solid #292929}.miniItem{padding:7px 0;border-bottom:1px solid #242424;font-size:12px}.miniItem b{color:var(--accent)}
+.modalBack{position:fixed;inset:0;background:#000b;z-index:100;display:none;align-items:flex-end;justify-content:center}.modalBack.show{display:flex}.modal{background:#111;border:1px solid #514916;border-radius:15px 15px 0 0;width:min(720px,100%);max-height:85vh;overflow:auto;padding:14px}.modal h3{margin:0 0 10px;color:var(--accent)}
+@media(max-width:700px){.status{display:none}.layout{padding:7px}h2{font-size:19px}.personBox{min-width:280px}.eventCell{min-width:240px}.tablewrap{border-radius:8px}th,td{font-size:12px;padding:6px}.toolbar button{padding:8px 9px}}
 </style>
 </head>
 <body>
 <header>
- <div class="headrow">
-  <div class="title">🕵️ マダミス・ノート</div>
-  <div class="status" id="status">自動保存</div>
- </div>
+ <div class="headrow"><div class="title">🕵️ マダミス・ノート</div><div class="status" id="status">自動保存</div></div>
  <div class="workbar">
-  <button onclick="newWork()">＋ 作品</button>
-  <button onclick="renameWork()">作品名変更</button>
-  <button onclick="deleteWork()" class="danger">作品削除</button>
-  <button onclick="exportAll()">バックアップ</button>
-  <label style="margin:0;white-space:nowrap"><button onclick="document.getElementById('importFile').click()">復元</button><input id="importFile" type="file" accept=".json" style="display:none" onchange="importAll(event)"></label>
+  <button class="primary" onclick="newWork()">＋ 作品</button><button onclick="renameWork()">作品名変更</button><button class="danger" onclick="deleteWork()">作品削除</button><button onclick="exportAll()">💾 バックアップ</button><button onclick="document.getElementById('importFile').click()">↩ 復元</button><input id="importFile" type="file" accept=".json" style="display:none" onchange="importAll(event)">
  </div>
  <div class="tabs" id="workTabs"></div>
 </header>
-
 <div class="layout">
  <div class="tabs" id="viewTabs">
-  <button class="tab active" onclick="showView('timeline',this)">📅 全体時系列</button>
-  <button class="tab" onclick="showView('characters',this)">👤 キャラ</button>
+  <button class="tab active" onclick="showView('timeline',this)">🕐 全体時系列・アリバイ</button>
+  <button class="tab" onclick="showView('matrix',this)">👥 アリバイ表</button>
+  <button class="tab" onclick="showView('characters',this)">👤 キャラクター</button>
   <button class="tab" onclick="showView('evidence',this)">🔎 証拠・推理</button>
  </div>
  <main>
   <section id="timeline" class="view active">
-   <h2>全体時系列</h2>
-   <div class="toolbar">
-    <button onclick="addTimeline()">＋ 時系列を追加</button>
-    <span class="hint">時間は5分刻みのスクロール式。人物・証言者は後から変更でき、キャラ別時系列にも自動反映されます。</span>
-   </div>
-   <div class="card tablewrap"><table id="timelineTable"><thead><tr>
-    <th>順番</th><th>時間・日付</th><th>場所</th><th>人物</th><th>出来事</th><th>情報源・証言者</th><th>確度</th><th>メモ</th><th>削除</th>
-   </tr></thead><tbody></tbody></table></div>
+   <h2>全員の時系列・アリバイ</h2><div class="sub">時間順に自動整列。人物と同行者を横スクロールで選び、同じ時間・同じ場所にいた人物を一行で管理します。</div>
+   <div class="notice">💡 時間を変更すると自動で並び替わります。出来事は折りたたんで、必要なときだけ詳細を開けます。</div>
+   <div class="toolbar"><button class="primary" onclick="addTimeline()">＋ 時系列を追加</button><button onclick="sortTimeline()">↕ 時間順に整列</button><span class="hint" id="timelineCount"></span></div>
+   <div class="card tablewrap"><table id="timelineTable"><thead><tr><th>時間</th><th>場所</th><th>人物・同行者</th><th>何があった？</th><th>情報源</th><th>確度</th><th>メモ</th><th>削除</th></tr></thead><tbody></tbody></table></div>
   </section>
-
+  <section id="matrix" class="view">
+   <h2>アリバイ表</h2><div class="sub">「その時間、その場所に誰がいたか」を一枚で確認。●をタップして在席／不在を切り替えられます。</div>
+   <div class="toolbar"><button onclick="showView('timeline',document.querySelector('#viewTabs .tab'))">← 時系列へ</button></div>
+   <div class="card tablewrap matrix"><table id="matrixTable"></table></div>
+  </section>
   <section id="characters" class="view">
-   <h2>キャラクター</h2>
-   <div class="toolbar"><button onclick="addCharacter()">＋ キャラを追加</button><span class="hint">追加したキャラは上のタブから直接切り替えできます。</span></div>
-   <div id="charactersGrid" class="grid"></div>
+   <h2>キャラクター</h2><div class="sub">人物情報と、その人物に紐づく時系列・証拠を確認します。</div>
+   <div class="toolbar"><button class="primary" onclick="addCharacter()">＋ キャラを追加</button></div><div id="charactersGrid" class="characterGrid"></div>
   </section>
-
   <section id="evidence" class="view">
-   <h2>証拠・推理メモ</h2>
-   <div class="toolbar"><button onclick="addEvidence()">＋ メモを追加</button><span class="hint">推理メモは折りたたんで整理できます。</span></div>
-   <div id="evidenceList"></div>
+   <h2>証拠・発言・推理</h2><div class="sub">カードを折りたたみながら、証拠・証言・推理・疑問を整理できます。</div>
+   <div class="toolbar"><button class="primary" onclick="addEvidence()">＋ メモを追加</button><button onclick="filterEvidence('all')">すべて</button><button onclick="filterEvidence('証拠')">証拠</button><button onclick="filterEvidence('発言')">発言</button><button onclick="filterEvidence('推理')">推理</button><button onclick="filterEvidence('疑問')">疑問</button></div>
+   <div id="evidenceList" class="evidenceGrid"></div>
   </section>
  </main>
 </div>
-
+<div class="modalBack" id="modal"><div class="modal"><div class="row"><h3 class="grow" id="modalTitle"></h3><button onclick="closeModal()">閉じる</button></div><div id="modalBody"></div></div></div>
 <script>
-const KEY="murder_mystery_notebook_v2";
-let all=JSON.parse(localStorage.getItem(KEY)||'{"works":{},"current":null}');
-let current=null;
-function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8)}
-function freshWork(name){return {name,characters:[],timeline:[],evidence:[]}}
-function ensure(){if(!all.works||typeof all.works!=="object")all={works:{},current:null};let ids=Object.keys(all.works);if(!ids.length){let id=uid();all.works[id]=freshWork("新しいマダミス");all.current=id}else if(!all.current||!all.works[all.current])all.current=ids[0];current=all.works[all.current]}
-function save(){localStorage.setItem(KEY,JSON.stringify(all));document.getElementById("status").textContent="保存済み "+new Date().toLocaleTimeString()}
-function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
-function renderWorkTabs(){const el=document.getElementById("workTabs");el.innerHTML="";Object.entries(all.works).forEach(([id,w])=>{let b=document.createElement("button");b.className="tab"+(id===all.current?" active":"");b.textContent=w.name;b.onclick=()=>{all.current=id;current=w;save();renderAll()};el.appendChild(b)})}
-function newWork(){let name=prompt("作品名を入力してください","新しいマダミス");if(!name)return;let id=uid();all.works[id]=freshWork(name);all.current=id;current=all.works[id];save();renderAll()}
-function renameWork(){let name=prompt("作品名",current.name);if(name){current.name=name;save();renderWorkTabs()}}
-function deleteWork(){if(!confirm("現在の作品を削除しますか？"))return;let ids=Object.keys(all.works);if(ids.length===1){alert("最後の作品は削除できません。");return}delete all.works[all.current];all.current=Object.keys(all.works)[0];current=all.works[all.current];save();renderAll()}
-function showView(id,btn){document.querySelectorAll(".view").forEach(x=>x.classList.remove("active"));document.getElementById(id).classList.add("active");document.querySelectorAll("#viewTabs .tab").forEach(x=>x.classList.remove("active"));btn.classList.add("active")}
-function addTimeline(pref={}){current.timeline.push({id:uid(),order:current.timeline.length+1,time:"",place:"",people:"",event:"",source:"",certainty:"未確認",memo:"",...pref});save();renderTimeline()}
-function charNames(){return current.characters.map(c=>c.name).filter(Boolean)}
-function sourceSelect(value,i){let opts=['未確認','本人の証言',...charNames(),'証拠品','GM情報','その他'];let seen=[];opts=opts.filter(x=>!seen.includes(x)&&seen.push(x));return `<select onchange="tlEdit(${i},'source',this.value)">${opts.map(x=>`<option ${x===value?'selected':''}>${esc(x)}</option>`).join("")}</select>`}
-function timeSelect(value,i){let opts=[''];for(let h=0;h<24;h++) for(let m=0;m<60;m+=5) opts.push(String(h).padStart(2,'0')+':'+String(m).padStart(2,'0'));return `<select style="min-width:92px" aria-label="時間" onchange="tlEdit(${i},'time',this.value)">${opts.map(x=>`<option value="${x}" ${x===value?'selected':''}>${x||'—'}</option>`).join("")}</select>`}
-function renderTimeline(){let tb=document.querySelector("#timelineTable tbody");tb.innerHTML="";current.timeline.forEach((r,i)=>{let tr=document.createElement("tr");[["order",r.order],["time",r.time],["place",r.place],["people",r.people],["event",r.event]].forEach(([k,v])=>{let td=document.createElement("td");if(k==="time"){td.innerHTML=timeSelect(r.time,i)}else{td.contentEditable=true;td.textContent=v??"";td.oninput=()=>{r[k]=td.textContent;save()}}tr.appendChild(td)});let td=document.createElement("td");td.innerHTML=sourceSelect(r.source,i);tr.appendChild(td);td=document.createElement("td");td.contentEditable=true;td.textContent=r.certainty||"";td.oninput=()=>{r.certainty=td.textContent;save()};tr.appendChild(td);td=document.createElement("td");td.contentEditable=true;td.textContent=r.memo||"";td.oninput=()=>{r.memo=td.textContent;save()};tr.appendChild(td);td=document.createElement("td");let b=document.createElement("button");b.textContent="×";b.className="danger";b.onclick=()=>{current.timeline.splice(i,1);save();renderTimeline();renderCharacters()};td.appendChild(b);tr.appendChild(td);tb.appendChild(tr)})}
-function tlEdit(i,k,v){current.timeline[i][k]=v;save();renderCharacters()}
-function addCharacter(){let name=prompt("キャラクター名を入力してください","新しい人物");if(!name)return;current.characters.push({id:uid(),name,alias:"",relation:"",memo:""});save();renderAll()}
-function removeChar(i){if(confirm(current.characters[i].name+" を削除しますか？")){current.characters.splice(i,1);save();renderAll()}}
-function charEdit(i,k,v){current.characters[i][k]=v;save();if(k==="name"){renderWorkTabs();renderTimeline();}}
-function renderCharacters(){let g=document.getElementById("charactersGrid");g.innerHTML="";if(!current.characters.length){g.innerHTML='<div class="empty">「＋ キャラを追加」から人物を登録してください。</div>';return}current.characters.forEach((c,i)=>{let rows=current.timeline.filter(r=>String(r.people).split(/[、,\/\s]+/).includes(c.name)||String(r.people).includes(c.name)||String(r.source)===c.name);let d=document.createElement("div");d.className="card character";d.innerHTML=`<div class="row"><h3 class="grow">${esc(c.name)}</h3><button class="danger" onclick="removeChar(${i})">削除</button></div><label>名前</label><input value="${esc(c.name)}" oninput="charEdit(${i},'name',this.value)"><label>呼び方・呼ばれ方</label><input value="${esc(c.alias)}" placeholder="例：A→Bは「先生」／B→Aは「君」" oninput="charEdit(${i},'alias',this.value)"><label>関係性</label><input value="${esc(c.relation)}" placeholder="例：幼馴染・上司・共犯？" oninput="charEdit(${i},'relation',this.value)"><details open><summary>このキャラの時系列 <span class="badge">${rows.length}件</span></summary><div class="detailsbody">${rows.length?rows.map(r=>`<div style="padding:7px 0;border-bottom:1px solid #eee"><b>${esc(r.time||"時間不明")}</b>　${esc(r.event)}<div class="mini">場所：${esc(r.place)} ／ 情報源：${esc(r.source||"未記録")} ／ 確度：${esc(r.certainty||"")}</div></div>`).join(""):'<span class="hint">全体時系列でこの人物を登録するとここに反映されます。</span>'}</div></details><details><summary>このキャラに関する証拠</summary><div class="detailsbody">${renderCharEvidence(c.name)}</div></details><details><summary>自由メモ</summary><div class="detailsbody"><textarea placeholder="推理、印象、疑問、伏線など何でも" oninput="charEdit(${i},'memo',this.value)">${esc(c.memo)}</textarea></div></details>`;g.appendChild(d)})}
-function renderCharEvidence(name){let arr=current.evidence.filter(e=>String(e.people||"").includes(name));return arr.length?arr.map(e=>`<div style="padding:6px 0;border-bottom:1px solid #eee"><b>${esc(e.title||"無題")}</b><div class="mini">${esc(e.type||"")} ／ ${esc(e.source||"")} ／ ${esc(e.certainty||"")}</div></div>`).join(""):'<span class="hint">このキャラに関連するメモはありません。</span>'}
-function addEvidence(){current.evidence.push({id:uid(),type:"証拠",title:"",people:"",place:"",time:"",source:"",certainty:"未確認",memo:"",open:true});save();renderEvidence()}
-function evidenceEdit(i,k,v){current.evidence[i][k]=v;save()}
-function removeEvidence(i){current.evidence.splice(i,1);save();renderEvidence()}
-function renderEvidence(){let el=document.getElementById("evidenceList");el.innerHTML="";if(!current.evidence.length){el.innerHTML='<div class="empty">「＋ メモを追加」から証拠・発言・推理などを登録してください。</div>';return}current.evidence.forEach((e,i)=>{let d=document.createElement("details");d.open=e.open!==false;d.ontoggle=()=>{e.open=d.open;save()};d.innerHTML=`<summary><span class="badge">${esc(e.type)}</span>${esc(e.title||"無題")}</summary><div class="detailsbody"><label>分類</label><select onchange="evidenceEdit(${i},'type',this.value);renderEvidence()"><option ${e.type==='証拠'?'selected':''}>証拠</option><option ${e.type==='発言'?'selected':''}>発言</option><option ${e.type==='推理'?'selected':''}>推理</option><option ${e.type==='疑問'?'selected':''}>疑問</option><option ${e.type==='メモ'?'selected':''}>メモ</option></select><label>タイトル</label><input value="${esc(e.title)}" oninput="evidenceEdit(${i},'title',this.value)"><label>関連人物</label><input value="${esc(e.people)}" placeholder="例：A、B" oninput="evidenceEdit(${i},'people',this.value);renderCharacters()"><label>場所</label><input value="${esc(e.place)}" oninput="evidenceEdit(${i},'place',this.value)"><label>時刻</label><input value="${esc(e.time)}" placeholder="例：21:30" oninput="evidenceEdit(${i},'time',this.value)"><label>情報源</label><input value="${esc(e.source)}" oninput="evidenceEdit(${i},'source',this.value)"><label>確度</label><input value="${esc(e.certainty)}" oninput="evidenceEdit(${i},'certainty',this.value)"><label>内容・推理メモ</label><textarea oninput="evidenceEdit(${i},'memo',this.value)">${esc(e.memo)}</textarea><div class="toolbar" style="margin-top:9px"><button class="danger" onclick="removeEvidence(${i})">削除</button></div></div>`;el.appendChild(d)})}
-function exportAll(){let blob=new Blob([JSON.stringify(all,null,2)],{type:"application/json"});let a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="madamis-note-backup.json";a.click();URL.revokeObjectURL(a.href)}
-function importAll(ev){let f=ev.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let x=JSON.parse(r.result);if(!x.works)throw Error();all=x;ensure();save();renderAll();alert("復元しました。")}catch(e){alert("復元できないJSONです。")}};r.readAsText(f);ev.target.value=""}
-function renderAll(){ensure();renderWorkTabs();renderTimeline();renderCharacters();renderEvidence()}
+const KEY='murder_mystery_notebook_v2';
+let all;try{all=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){all={}};let current=null;let evidenceFilter='all';
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const freshWork=name=>({name,characters:[],timeline:[],evidence:[]});
+function ensure(){if(!all.works||typeof all.works!=='object')all={works:{},current:null};let ids=Object.keys(all.works);if(!ids.length){let id=uid();all.works[id]=freshWork('新しいマダミス');all.current=id}if(!all.current||!all.works[all.current])all.current=Object.keys(all.works)[0];current=all.works[all.current];migrate();}
+function migrate(){current.characters=(current.characters||[]).map(c=>({...c,id:c.id||uid(),name:c.name||'名無し',alias:c.alias||'',relation:c.relation||'',memo:c.memo||''}));current.timeline=(current.timeline||[]).map(r=>{let people=Array.isArray(r.people)?r.people:(r.people?[r.people]:[]);let companions=Array.isArray(r.companions)?r.companions:[];if(typeof r.people==='string')people=r.people.split(/[、,\/]+/).map(x=>x.trim()).filter(Boolean);return {...r,id:r.id||uid(),time:r.time||'',place:r.place||'',people,companions,event:r.event||'',source:r.source||'',certainty:r.certainty||'未確認',memo:r.memo||'',collapsed:r.collapsed??true}});current.evidence=(current.evidence||[]).map(e=>({...e,id:e.id||uid(),type:e.type||'証拠',title:e.title||'',people:e.people||'',place:e.place||'',time:e.time||'',source:e.source||'',certainty:e.certainty||'未確認',memo:e.memo||'',collapsed:e.collapsed??false}));}
+function save(){localStorage.setItem(KEY,JSON.stringify(all));let s=document.getElementById('status');if(s)s.textContent='保存済み '+new Date().toLocaleTimeString()}
+function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function renderWorkTabs(){let e=document.getElementById('workTabs');e.innerHTML='';Object.entries(all.works).forEach(([id,w])=>{let b=document.createElement('button');b.className='tab '+(id===all.current?'active':'');b.textContent=w.name;b.onclick=()=>{all.current=id;current=w;migrate();save();renderAll()};e.appendChild(b)})}
+function newWork(){let n=prompt('作品名','新しいマダミス');if(!n)return;let id=uid();all.works[id]=freshWork(n);all.current=id;current=all.works[id];save();renderAll()}
+function renameWork(){let n=prompt('作品名',current.name);if(n){current.name=n;save();renderWorkTabs()}}
+function deleteWork(){let ids=Object.keys(all.works);if(ids.length<2)return alert('最後の作品は削除できません。');if(!confirm('現在の作品を削除しますか？'))return;delete all.works[all.current];all.current=Object.keys(all.works)[0];current=all.works[all.current];save();renderAll()}
+function showView(id,btn){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('#viewTabs .tab').forEach(x=>x.classList.remove('active'));if(btn)btn.classList.add('active');if(id==='matrix')renderMatrix()}
+function addCharacter(){let n=prompt('キャラクター名','新しい人物');if(!n)return;current.characters.push({id:uid(),name:n,alias:'',relation:'',memo:''});save();renderAll()}
+function editChar(i,k,v){current.characters[i][k]=v;save();renderTimeline();renderMatrix();renderCharacters()}
+function removeChar(i){if(!confirm(current.characters[i].name+' を削除しますか？'))return;let n=current.characters[i].name;current.characters.splice(i,1);current.timeline.forEach(r=>{r.people=r.people.filter(x=>x!==n);r.companions=r.companions.filter(x=>x!==n)});save();renderAll()}
+function timeValue(t){if(!t)return 9999;let m=String(t).match(/(\d{1,2})[:時](\d{1,2})?/);if(!m)return 9999;return Number(m[1])*60+Number(m[2]||0)}
+function sortTimeline(){current.timeline.sort((a,b)=>timeValue(a.time)-timeValue(b.time));save();renderTimeline();renderMatrix()}
+function addTimeline(){current.timeline.push({id:uid(),time:'',place:'',people:[],companions:[],event:'',source:'',certainty:'未確認',memo:'',collapsed:false});sortTimeline()}
+function updateTL(i,k,v){current.timeline[i][k]=v;save();if(k==='time'){sortTimeline();return}renderMatrix()}
+function togglePerson(i,name,kind){let a=current.timeline[i][kind]||[];if(a.includes(name))a=a.filter(x=>x!==name);else a=[...a,name];current.timeline[i][kind]=a;save();renderTimeline();renderMatrix();renderCharacters()}
+function personChips(i,kind){let arr=current.timeline[i][kind]||[];return `<div class="chips">${current.characters.map(c=>`<button class="chip ${arr.includes(c.name)?'on':''}" onclick="togglePerson(${i},'${esc(c.name).replace(/'/g,"\\'")}','${kind}')">${esc(c.name)}</button>`).join('')}${!current.characters.length?'<span class="hint">先にキャラを追加してください</span>':''}</div>`}
+function renderTimeline(){let tb=document.querySelector('#timelineTable tbody');tb.innerHTML='';current.timeline.forEach((r,i)=>{let tr=document.createElement('tr');
+let td=document.createElement('td');td.className='timeCell';td.innerHTML=`<select class="selectSmall" onchange="updateTL(${i},'time',this.value)">${timeOptions(r.time)}</select>`;tr.appendChild(td);
+ td=document.createElement('td');td.className='placeCell';td.innerHTML=`<input class="edit" value="${esc(r.place)}" placeholder="場所" oninput="updateTL(${i},'place',this.value)">`;tr.appendChild(td);
+ td=document.createElement('td');td.className='personBox';td.innerHTML=`<div class="personLabel">この時間にいた人</div>${personChips(i,'people')}<div class="personLabel">一緒にいた人</div>${personChips(i,'companions')}<div class="peopleSummary">${[...new Set([...(r.people||[]),...(r.companions||[])])].join('・')||'—'}</div>`;tr.appendChild(td);
+ td=document.createElement('td');td.className='eventCell';let cls=r.collapsed?'collapsed':'';td.innerHTML=`<div class="eventToggle ${cls}" onclick="toggleEvent(${i})"><span>${esc(r.event||'何があった？')}</span><button class="collapseBtn" onclick="event.stopPropagation();toggleEvent(${i})">${r.collapsed?'開く':'折りたたむ'}</button></div><div class="eventBody"><textarea class="edit" placeholder="この時間に何があった？" oninput="updateTL(${i},'event',this.value)">${esc(r.event)}</textarea></div>`;tr.appendChild(td);
+ td=document.createElement('td');td.className='sourceCell';td.innerHTML=`<input class="edit" value="${esc(r.source)}" placeholder="誰の証言？証拠？" oninput="updateTL(${i},'source',this.value)"><select class="selectSmall" style="margin-top:5px" onchange="updateTL(${i},'certainty',this.value)">${['未確認','確実','本人証言','伝聞','推定'].map(x=>`<option ${x===r.certainty?'selected':''}>${x}</option>`).join('')}</select>`;tr.appendChild(td);
+ td=document.createElement('td');td.innerHTML=`<input class="edit" value="${esc(r.certainty)}" placeholder="確度" oninput="updateTL(${i},'certainty',this.value)">`;tr.appendChild(td);
+ td=document.createElement('td');td.className='noteCell';td.innerHTML=`<textarea class="edit" placeholder="推理・矛盾・補足" oninput="updateTL(${i},'memo',this.value)">${esc(r.memo)}</textarea>`;tr.appendChild(td);
+ td=document.createElement('td');td.innerHTML=`<button class="danger" onclick="removeTimeline(${i})">削除</button>`;tr.appendChild(td);tb.appendChild(tr)});document.getElementById('timelineCount').textContent=current.timeline.length+'件';}
+function timeOptions(v){let o='<option value="">—</option>';for(let h=0;h<24;h++)for(let m=0;m<60;m+=5){let x=String(h).padStart(2,'0')+':'+String(m).padStart(2,'0');o+=`<option value="${x}" ${x===v?'selected':''}>${x}</option>`}return o}
+function toggleEvent(i){current.timeline[i].collapsed=!current.timeline[i].collapsed;save();renderTimeline()}
+function removeTimeline(i){if(!confirm('この時系列を削除しますか？'))return;current.timeline.splice(i,1);save();renderTimeline();renderMatrix();renderCharacters()}
+function renderMatrix(){let t=document.getElementById('matrixTable');if(!t)return;let heads=current.characters.map(c=>`<th>${esc(c.name)}</th>`).join('');let rows=current.timeline.map((r,i)=>`<tr><th>${esc(r.time||'—')}<br><span style="font-weight:400;color:#aaa">${esc(r.place||'場所不明')}</span></th>${current.characters.map(c=>{let on=(r.people||[]).includes(c.name)||(r.companions||[]).includes(c.name);return `<td><span class="presence ${on?'on':''}" onclick="togglePerson(${i},'${esc(c.name).replace(/'/g,"\\'")}',${(r.people||[]).includes(c.name)?'\'people\'':'\'companions\''})">${on?'●':'○'}</span></td>`}).join('')}</tr>`).join('');t.innerHTML=`<thead><tr><th>時間・場所</th>${heads}</tr></thead><tbody>${rows||'<tr><td colspan="99" class="empty">時系列を追加してください。</td></tr>'}</tbody>`}
+function renderCharacters(){let g=document.getElementById('charactersGrid');if(!g)return;g.innerHTML='';if(!current.characters.length){g.innerHTML='<div class="empty">キャラクターを追加すると、ここに人物別のアリバイがまとまります。</div>';return}current.characters.forEach((c,i)=>{let rows=current.timeline.filter(r=>(r.people||[]).includes(c.name)||(r.companions||[]).includes(c.name));let ev=current.evidence.filter(e=>String(e.people||'').includes(c.name));let d=document.createElement('div');d.className='characterCard';d.innerHTML=`<div class="row"><h3 class="grow">${esc(c.name)}</h3><span class="stat">${rows.length}件</span><button class="danger" onclick="removeChar(${i})">削除</button></div><label>名前</label><input class="edit" value="${esc(c.name)}" oninput="editChar(${i},'name',this.value)"><label>呼び方・呼ばれ方</label><input class="edit" value="${esc(c.alias)}" placeholder="例：先生／君" oninput="editChar(${i},'alias',this.value)"><label>関係性</label><input class="edit" value="${esc(c.relation)}" placeholder="例：幼馴染・共犯？" oninput="editChar(${i},'relation',this.value)"><label>自由メモ</label><textarea class="edit" oninput="editChar(${i},'memo',this.value)">${esc(c.memo)}</textarea><div class="miniList">${rows.slice(0,12).map(r=>`<div class="miniItem"><b>${esc(r.time||'時間不明')}</b>　${esc(r.place||'場所不明')}<br>${esc(r.event||'出来事未入力')}<br><span class="hint">一緒：${[...(r.people||[]),...(r.companions||[])].filter(x=>x!==c.name).join('・')||'なし'}</span></div>`).join('')||'<div class="hint" style="padding:8px">時系列なし</div>'}${rows.length>12?`<div class="hint">ほか${rows.length-12}件</div>`:''}</div><div class="miniList"><div class="miniItem"><b>関連証拠</b> ${ev.length}件</div></div>`;g.appendChild(d)})}
+function addEvidence(){current.evidence.unshift({id:uid(),type:'証拠',title:'',people:'',place:'',time:'',source:'',certainty:'未確認',memo:'',collapsed:false});save();renderEvidence()}
+function editEvidence(i,k,v){current.evidence[i][k]=v;save()}
+function toggleEvidence(i){current.evidence[i].collapsed=!current.evidence[i].collapsed;save();renderEvidence()}
+function removeEvidence(i){current.evidence.splice(i,1);save();renderEvidence();renderCharacters()}
+function filterEvidence(f){evidenceFilter=f;renderEvidence()}
+function renderEvidence(){let el=document.getElementById('evidenceList');let arr=current.evidence.filter(e=>evidenceFilter==='all'||e.type===evidenceFilter);el.innerHTML='';if(!arr.length){el.innerHTML='<div class="empty">この分類にはメモがありません。</div>';return}arr.forEach(e=>{let i=current.evidence.indexOf(e);let d=document.createElement('div');d.className='eCard '+(e.collapsed?'collapsed':'');d.innerHTML=`<div class="eHead"><span class="badge">${esc(e.type)}</span><strong>${esc(e.title||'無題')}</strong><button class="collapseMark" onclick="toggleEvidence(${i})">⌄</button><button class="danger" onclick="removeEvidence(${i})">×</button></div><div class="eBody"><label>分類</label><select onchange="editEvidence(${i},'type',this.value);renderEvidence()">${['証拠','発言','推理','疑問','メモ'].map(x=>`<option ${x===e.type?'selected':''}>${x}</option>`).join('')}</select><label>タイトル</label><input value="${esc(e.title)}" placeholder="例：血痕のあるナイフ" oninput="editEvidence(${i},'title',this.value)"><label>関連人物</label><input value="${esc(e.people)}" placeholder="例：主人公、キャラ1" oninput="editEvidence(${i},'people',this.value);renderCharacters()"><label>場所</label><input value="${esc(e.place)}" placeholder="例：厨房" oninput="editEvidence(${i},'place',this.value)"><label>時刻</label><input value="${esc(e.time)}" placeholder="13:30" oninput="editEvidence(${i},'time',this.value)"><label>情報源</label><input value="${esc(e.source)}" placeholder="誰の証言・どの証拠から？" oninput="editEvidence(${i},'source',this.value)"><label>確度</label><select onchange="editEvidence(${i},'certainty',this.value)">${['未確認','確実','本人証言','伝聞','推定'].map(x=>`<option ${x===e.certainty?'selected':''}>${x}</option>`).join('')}</select><label>内容・推理</label><textarea placeholder="見つけた事実、矛盾、推理、疑問など" oninput="editEvidence(${i},'memo',this.value)">${esc(e.memo)}</textarea></div>`;el.appendChild(d)})}
+function exportAll(){let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(all,null,2)],{type:'application/json'}));a.download='madamis-note-backup.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500)}
+function importAll(ev){let f=ev.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let x=JSON.parse(r.result);if(!x.works)throw 0;all=x;ensure();save();renderAll();alert('復元しました。')}catch(e){alert('復元できないバックアップです。')}};r.readAsText(f);ev.target.value=''}
+function renderAll(){ensure();renderWorkTabs();renderTimeline();renderMatrix();renderCharacters();renderEvidence()}
 renderAll();
 </script>
-</body>
-</html>
+</body></html>
