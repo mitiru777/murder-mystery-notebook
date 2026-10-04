@@ -1,0 +1,21 @@
+name: Publish v4 app
+on:
+  push:
+    paths:
+      - 'murder_mystery_notebook_v4.html'
+      - '.github/workflows/publish-v4.yml'
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Copy v4 to index.html
+        run: |
+          cp murder_mystery_notebook_v4.html index.html
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html
+          git diff --cached --quiet || git commit -m 'Publish v4 app'
+          git push
