@@ -1,0 +1,1 @@
+{"name":"マダミスメモ","short_name":"マダミスメモ","description":"マーダーミステリーの時系列・アリバイ・キャラクター・証拠などをまとめて管理できるメモアプリ。","start_url":"./index.html","scope":"./","display":"standalone","background_color":"#f7f1e8","theme_color":"#f7f1e8","icons":[{"src":"./icon.svg","sizes":"180x180","type":"image/svg+xml","purpose":"any maskable"}]}
