@@ -1,0 +1,32 @@
+name: Fix character input focus
+on:
+  push:
+    paths:
+      - '.github/workflows/fix-character-input.yml'
+permissions:
+  contents: write
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fix character memo inputs
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          old = "function editChar(i,k,v){current.characters[i][k]=v;save();renderTimeline();renderAlibiCheck();renderAlibiMatrix();if(k!=='pairTag')renderCharacters()}"
+          new = "function editChar(i,k,v){if(!current.characters[i])return;current.characters[i][k]=v;save();renderTimeline();renderAlibiCheck();renderAlibiMatrix()}"
+          if old in s:
+              s = s.replace(old, new, 1)
+          hook = "document.addEventListener('focusout',e=>{if(e.target.closest('#charactersGrid')&&(e.target.matches('input,textarea,select')))renderCharacters()});"
+          if hook not in s:
+              s = s.replace('</script></body></html>', hook + '</script></body></html>', 1)
+          p.write_text(s, encoding='utf-8')
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html
+          git diff --cached --quiet || git commit -m 'Fix character memo input focus'
+          git push
