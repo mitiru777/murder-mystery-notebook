@@ -17,18 +17,20 @@ jobs:
           import re
           p = Path('index.html')
           s = p.read_text(encoding='utf-8')
-          old = "function editChar(i,k,v){current.characters[i][k]=v;save();renderTimeline();renderAlibiCheck();renderAlibiMatrix();if(k!=='pairTag')renderCharacters()}"
-          new = "function editChar(i,k,v){if(!current.characters[i])return;current.characters[i][k]=v;save();renderTimeline();renderAlibiCheck();renderAlibiMatrix()}"
-          if old in s:
-              s = s.replace(old, new, 1)
-          # 入力中に画面全体を再描画すると、カーソルが外れて1文字ずつしか入力できなくなる。
-          # 推理メモなど他の入力欄についても、oninput内のrender呼び出しを外して入力中は再描画しない。
+          # 入力中にDOMを再描画する呼び出しをoninputから除去
           def clean_oninput(m):
-              attr = m.group(1)
-              attr = re.sub(r';?\s*render[A-Za-z0-9_]+\([^)]*\)', '', attr)
+              attr = re.sub(r';?\s*render[A-Za-z0-9_]+\([^)]*\)', '', m.group(1))
               return 'oninput="' + attr + '"'
           s = re.sub(r'oninput="([^"]*)"', clean_oninput, s)
-          hook = "document.addEventListener('focusout',e=>{if(e.target.matches('input,textarea,select')){setTimeout(()=>{if(e.target.closest('#charactersGrid'))renderCharacters();else renderAll();},0)}});"
+          # 推理・証拠の編集関数も入力中は再描画しない
+          def clean_edit(m):
+              name, args, body = m.group(1), m.group(2), m.group(3)
+              if 'evidence' in body.lower() or 'Evidence' in name:
+                  body = re.sub(r';?\s*render[A-Za-z0-9_]+\([^)]*\)', '', body)
+              return 'function '+name+'('+args+'){'+body+'}'
+          s = re.sub(r'function\s+(edit[A-Za-z0-9_]+)\(([^)]*)\)\{([^{}]*)\}', clean_edit, s)
+          # フォーカスを外した時だけ表示を更新
+          hook = "document.addEventListener('focusout',e=>{if(e.target.matches('input,textarea,select')){setTimeout(()=>{if(e.target.closest('#charactersGrid'))renderCharacters();else if(e.target.closest('#evidenceList')&&typeof renderEvidence==='function')renderEvidence();else renderAll();},0)}});"
           if hook not in s:
               s = s.replace('</script></body></html>', hook + '</script></body></html>', 1)
           p.write_text(s, encoding='utf-8')
