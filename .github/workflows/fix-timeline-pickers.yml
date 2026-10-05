@@ -1,0 +1,36 @@
+name: Fix timeline pickers
+on:
+  push:
+    branches: [main]
+permissions:
+  contents: write
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch selector variable references
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          old1 = 'span.textContent=l.name;span.style.fontWeight=\'800\''
+          new1 = 'span.textContent=n;span.style.fontWeight=\'800\''
+          old2 = 'span.textContent=n;let personColor=pairColorForName(n);if(personColor)span.style.color=personColor;span.style.fontWeight=\'800\''
+          new2 = 'span.textContent=l.name;span.style.fontWeight=\'800\''
+          if old1 not in s:
+              raise SystemExit('person selector bug pattern not found')
+          if old2 not in s:
+              raise SystemExit('location selector bug pattern not found')
+          s = s.replace(old1, new1, 1).replace(old2, new2, 1)
+          p.write_text(s, encoding='utf-8')
+          PY
+      - name: Commit fix and remove temporary workflow
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html
+          git rm .github/workflows/fix-timeline-pickers.yml
+          git commit -m 'fix: restore timeline person and location selectors'
+          git push
