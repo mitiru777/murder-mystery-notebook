@@ -1,4 +1,4 @@
-name: Fix character input focus
+name: Fix location UI
 on:
   push:
     paths:
@@ -10,33 +10,42 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Fix text input focus
+      - name: Repair location rendering and add buttons
         run: |
           python - <<'PY'
           from pathlib import Path
           import re
           p = Path('index.html')
           s = p.read_text(encoding='utf-8')
-          # 入力中にDOMを再描画する呼び出しをoninputから除去
-          def clean_oninput(m):
-              attr = re.sub(r';?\s*render[A-Za-z0-9_]+\([^)]*\)', '', m.group(1))
-              return 'oninput="' + attr + '"'
-          s = re.sub(r'oninput="([^"]*)"', clean_oninput, s)
-          # 推理・証拠の編集関数も入力中は再描画しない
-          def clean_edit(m):
-              name, args, body = m.group(1), m.group(2), m.group(3)
-              if 'evidence' in body.lower() or 'Evidence' in name:
-                  body = re.sub(r';?\s*render[A-Za-z0-9_]+\([^)]*\)', '', body)
-              return 'function '+name+'('+args+'){'+body+'}'
-          s = re.sub(r'function\s+(edit[A-Za-z0-9_]+)\(([^)]*)\)\{([^{}]*)\}', clean_edit, s)
-          # フォーカスを外した時だけ表示を更新
-          hook = "document.addEventListener('focusout',e=>{if(e.target.matches('input,textarea,select')){setTimeout(()=>{if(e.target.closest('#charactersGrid'))renderCharacters();else if(e.target.closest('#evidenceList')&&typeof renderEvidence==='function')renderEvidence();else renderAll();},0)}});"
-          if hook not in s:
-              s = s.replace('</script></body></html>', hook + '</script></body></html>', 1)
+
+          # Make the add buttons explicit targets so they remain usable even if inline handlers are affected.
+          s = s.replace('<button onclick="addCharacter()">＋ キャラを追加</button>', '<button id="addCharacterBtn" type="button" onclick="addCharacter()">＋ キャラを追加</button>')
+          s = s.replace('<button onclick="addLocation()">＋ 場所を追加</button>', '<button id="addLocationBtn" type="button" onclick="addLocation()">＋ 場所を追加</button>')
+
+          # Replace the entire location renderer with a simpler, non-destructive implementation.
+          replacement = r'''function addLocation(){let n=prompt('場所の名前','新しい場所');if(n===null)return;n=n.trim();if(!n){alert('場所名を入力してください。');return}current.locations.push({id:uid(),name:n,memo:'',open:true});save();renderLocations();renderTimeline()}function deleteLocation(i){if(!current.locations[i])return;let name=current.locations[i].name;if(!confirm('「'+name+'」を削除しますか？\\nこの場所を使っている時系列の場所は未選択になります。'))return;current.timeline.forEach(r=>{if(r.place===name)r.place=''});current.locations.splice(i,1);save();renderLocations();renderTimeline()}function renderLocations(){let g=document.getElementById('locationsGrid');if(!g)return;g.innerHTML='';if(!current.locations.length){g.innerHTML='<div class="empty">「＋ 場所を追加」から登録してください。</div>';return}let list=document.createElement('div');list.className='location-list';current.locations.forEach((l,i)=>{let rows=current.timeline.filter(r=>r.place===l.name).slice().sort((a,b)=>timeKey(a.time)-timeKey(b.time));let d=document.createElement('details');d.className='location-fold';d.open=!!l.open;d.ontoggle=()=>{l.open=d.open;save()};let events=rows.length?rows.map(r=>'<div class="location-timeline-item"><b>'+esc(r.time||'時間不明')+'</b><div>'+esc(r.event||'未記録')+'</div><div class="mini">人物：'+namesHtml(r.peopleNames||[],'・')+' ／ 同行：'+namesHtml(r.companions||[],'・')+' ／ 証言：'+namesHtml(r.witnesses||[],'・')+'</div></div>').join(''):'<span class="hint">まだありません。</span>';d.innerHTML='<summary><span class="location-name">'+esc(l.name)+'</span><span class="character-count">'+rows.length+'件</span></summary><div class="location-body"><button type="button" class="danger" onclick="deleteLocation('+i+')">場所を削除</button><label>場所名</label><input value="'+esc(l.name)+'" oninput="editLoc('+i+',\'name\',this.value)"><label>場所メモ</label><textarea placeholder="構造・出入口・特徴など" oninput="editLoc('+i+',\'memo\',this.value)">'+esc(l.memo||'')+'</textarea><details><summary>この場所の時系列</summary><div class="detailsbody location-timeline">'+events+'</div></details></div>';list.appendChild(d)});g.appendChild(list)}function editLoc(i,k,v){let l=current.locations[i];if(!l)return;if(k==='name'){let old=l.name;l.name=v;current.timeline.forEach(r=>{if(r.place===old)r.place=v})}else l[k]=v;save();if(k==='name'){renderLocations();renderTimeline()}}'''
+          pattern = r'function addLocation\(\).*?function editLoc\(i,k,v\)\{.*?\}'
+          s2, n = re.subn(pattern, replacement, s, count=1, flags=re.S)
+          if n:
+              s = s2
+          else:
+              raise SystemExit('location function block not found')
+
+          # Remove the fragile per-character wrapping behavior from location UI.
+          css = '''<style id="location-fix-v2">.location-list{width:100%;max-width:100%;overflow:visible}.location-fold{width:100%;max-width:100%}.location-name,.location-body,.location-timeline,.location-timeline-item,.location-timeline-item *,.location-fold summary,.location-fold summary *{white-space:normal!important;word-break:normal!important;overflow-wrap:anywhere!important;min-width:0}.location-body textarea{white-space:pre-wrap!important}.location-timeline-item{padding:8px 0;border-bottom:1px solid var(--line);line-height:1.6}.location-timeline-item:last-child{border-bottom:0}</style>'''
+          if 'id="location-fix-v2"' not in s:
+              s = s.replace('</head>', css + '</head>', 1)
+
+          # Explicit delegated fallbacks for the two add buttons.
+          hook = '''<script id="location-button-fallback">document.addEventListener('click',function(e){if(e.target&&e.target.id==='addCharacterBtn'){e.preventDefault();addCharacter()}if(e.target&&e.target.id==='addLocationBtn'){e.preventDefault();addLocation()}});</script>'''
+          if 'id="location-button-fallback"' not in s:
+              s = s.replace('</body>', hook + '</body>', 1)
+
           p.write_text(s, encoding='utf-8')
           PY
+          node --check <(python -c "import re; s=open('index.html').read(); print(re.search(r'<script>(.*?)</script>',s,re.S).group(1))")
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add index.html
-          git diff --cached --quiet || git commit -m 'Fix inference memo input focus'
+          git add index.html .github/workflows/fix-character-input.yml
+          git diff --cached --quiet || git commit -m 'Repair location UI and add controls'
           git push
