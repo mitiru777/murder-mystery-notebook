@@ -1,0 +1,39 @@
+name: Apply notebook UI fix
+on:
+  push:
+    paths:
+      - .github/workflows/apply-notebook-ui-fix.yml
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch index.html
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+          css='.location-body,.location-body *,.location-name,.location-name *,.location-fold summary,.location-fold summary *,.location-fold .detailsbody,.location-fold .detailsbody *{word-break:keep-all;overflow-wrap:normal;min-width:0}.location-body textarea,.location-body input{word-break:normal;overflow-wrap:anywhere}.evidence-content-toggle{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;width:100%;padding:8px 10px;margin-top:6px;border:1px solid var(--line);border-radius:12px;background:#fffaf3;color:var(--text);font-weight:800;text-align:left;cursor:pointer}.evidence-content-preview{display:block;white-space:pre-wrap;line-height:1.5;overflow:hidden;flex:1;min-width:0}.evidence-content-preview.collapsed{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2}.evidence-content-preview.expanded{max-height:none}.evidence-content-arrow{flex:none;color:var(--muted);font-size:11px;padding-top:2px}'
+          if css not in s: s=s.replace('</style>',css+'</style>',1)
+          a=s.index('function renderLocations')
+          b=s.index('function editLoc',a)
+          newloc='''function renderLocations(){let g=document.getElementById('locationsGrid');g.innerHTML='';if(!current.locations.length){g.innerHTML='<div class="empty">「＋ 場所を追加」から登録してください。</div>';return}let list=document.createElement('div');list.className='location-list';current.locations.forEach((l,i)=>{let rows=current.timeline.filter(r=>r.place===l.name),d=document.createElement('details');d.className='location-fold';d.open=!!l.open;d.ontoggle=()=>{l.open=d.open;save()};d.innerHTML=`<summary><span class="location-name">${esc(l.name)}</span><span class="character-count">${rows.length}件</span></summary><div class="location-body"><button class="danger" onclick="event.preventDefault();current.locations.splice(${i},1);save();renderAll()">場所を削除</button><label>場所名</label><input value="${esc(l.name)}" oninput="editLoc(${i},'name',this.value)"><label>場所メモ</label><textarea placeholder="構造・出入口・特徴など" oninput="editLoc(${i},'memo',this.value)">${esc(l.memo)}</textarea><details><summary>この場所の時系列</summary><div class="detailsbody">${rows.sort((a,b)=>timeKey(a.time)-timeKey(b.time)).map(r=>`<div><b>${esc(r.time||'時間不明')}</b> ${esc(r.event||'')}<div class="mini">人物：${esc((r.peopleNames||[]).join('・')||'未記録')} ／ 同行：${esc((r.companions||[]).join('・')||'なし')}</div></div>`).join('')||'<span class="hint">まだありません。</span>'}</div></details></div>`;list.appendChild(d)});g.appendChild(list)}'''
+          s=s[:a]+newloc+s[b:]
+          a=s.index('function renderEvidence')
+          b=s.index('function editWorkInfo',a)
+          newev='''function renderEvidence(){let g=document.getElementById('evidenceList');g.innerHTML='';if(!current.evidence.length){g.innerHTML='<div class="empty">「＋ メモを追加」から追加してください。</div>';return}current.evidence.forEach((e,i)=>{if(typeof e.contentOpen!=='boolean')e.contentOpen=false;let d=document.createElement('details');d.open=!!e.open;d.ontoggle=()=>{e.open=d.open;save()};let preview=e.content?esc(e.content):'内容をタップして表示';d.innerHTML=`<summary><span class="badge">${esc(e.type)}</span> ${esc(e.title)} <span class="hint" style="float:right">タップで開閉</span></summary><div class="detailsbody"><input value="${esc(e.title)}" oninput="editE(${i},'title',this.value)"><label>種類</label><select onchange="editE(${i},'type',this.value)">${['証拠','発言','推理','疑問','その他'].map(x=>`<option ${x===e.type?'selected':''}>${x}</option>`).join('')}</select><label>内容</label><button type="button" class="evidence-content-toggle" onclick="toggleEvidenceContent(${i},this)"><span class="evidence-content-preview ${e.contentOpen?'expanded':'collapsed'}">${preview}</span><span class="evidence-content-arrow">${e.contentOpen?'▲':'▼'}</span></button><textarea class="evidence-content-editor" style="display:${e.contentOpen?'block':'none'}" oninput="editE(${i},'content',this.value)">${esc(e.content)}</textarea><label>関連人物・場所・時刻</label><input value="${esc(e.related)}" oninput="editE(${i},'related',this.value)"><label>情報源</label><input value="${esc(e.source)}" oninput="editE(${i},'source',this.value)"><label>確度</label><input value="${esc(e.certainty)}" oninput="editE(${i},'certainty',this.value)"><button class="danger" onclick="current.evidence.splice(${i},1);save();renderEvidence()">削除</button></div>`;g.appendChild(d)})}function toggleEvidenceContent(i,btn){let e=current.evidence[i];if(!e)return;e.contentOpen=!e.contentOpen;save();let preview=btn.querySelector('.evidence-content-preview'),arrow=btn.querySelector('.evidence-content-arrow'),editor=btn.nextElementSibling;if(preview){preview.classList.toggle('collapsed',!e.contentOpen);preview.classList.toggle('expanded',e.contentOpen);preview.textContent=e.content||'内容をタップして表示'}if(arrow)arrow.textContent=e.contentOpen?'▲':'▼';if(editor)editor.style.display=e.contentOpen?'block':'none'}function editE(i,k,v){current.evidence[i][k]=v;save();if(k==='content'){let d=document.querySelectorAll('#evidenceList>details')[i];if(d){let p=d.querySelector('.evidence-content-preview');if(p)p.textContent=v||'内容をタップして表示'}}}function editWorkInfo'''
+          s=s[:a]+newev+s[b+len('function editWorkInfo'):]
+          s=s.replace('open:true,contentOpen:true});save();renderEvidence()}','open:true,contentOpen:false});save();renderEvidence()}')
+          p.write_text(s,encoding='utf-8')
+          PY
+      - name: Commit patched file and remove workflow
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git rm .github/workflows/apply-notebook-ui-fix.yml
+          git diff --cached --quiet || git commit -m "Fix evidence content toggle and location text wrapping"
+          git push
