@@ -52,8 +52,8 @@ jobs:
                 if(target.dataset.evidenceContentEnhanced==='1') return;
                 var raw=(target.value!==undefined?target.value:target.textContent||'').trim();
                 if(!raw) return;
+                d.dataset.evidenceContentToggle='1';
                 target.dataset.evidenceContentEnhanced='1';
-                var wrap=document.createElement('div');
                 var btn=document.createElement('button');
                 btn.type='button';
                 btn.className='evidence-content-toggle';
@@ -61,18 +61,14 @@ jobs:
                 var preview=btn.firstElementChild;
                 preview.textContent=raw;
                 var arrow=btn.lastElementChild;
-                btn.addEventListener('click',function(){
+                btn.addEventListener('click',function(ev){
+                  ev.preventDefault();
+                  ev.stopPropagation();
                   var open=preview.classList.toggle('expanded');
                   arrow.textContent=open?'▲':'▼';
                 });
-                if(target.tagName==='TEXTAREA'||target.tagName==='INPUT'){
-                  target.style.display='none';
-                  wrap.appendChild(btn);
-                  target.parentNode.insertBefore(wrap,target.nextSibling);
-                }else{
-                  target.style.display='none';
-                  target.parentNode.insertBefore(btn,target.nextSibling);
-                }
+                target.style.display='none';
+                target.parentNode.insertBefore(btn,target.nextSibling);
               });
             }
             if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',enhance); else enhance();
