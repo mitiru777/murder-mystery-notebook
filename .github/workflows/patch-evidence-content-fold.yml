@@ -1,0 +1,40 @@
+name: Patch evidence content fold
+
+on:
+  push:
+    paths:
+      - '.github/workflows/patch-evidence-content-fold.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch index.html
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          old = "function addEvidence(){current.evidence.push({id:uid(),title:'新しいメモ',type:'推理',content:'',related:'',source:'未記録',certainty:'未確認',open:true});save();renderEvidence()}"
+          new = "function addEvidence(){current.evidence.push({id:uid(),title:'新しいメモ',type:'推理',content:'',related:'',source:'未記録',certainty:'未確認',open:true,contentOpen:true});save();renderEvidence()}"
+          if old not in s:
+              raise SystemExit('anchor 1 not found')
+          s = s.replace(old, new, 1)
+          old = "function renderEvidence(){let g=document.getElementById('evidenceList');g.innerHTML='';if(!current.evidence.length){g.innerHTML='<div class=\"empty\">「＋ メモを追加」から追加してください。</div>';return}current.evidence.forEach((e,i)=>{let d=document.createElement('details');d.open=!!e.open;d.ontoggle=()=>{e.open=d.open;save()};d.innerHTML=`<summary><span class=\"badge\">${esc(e.type)}</span> ${esc(e.title)} <span class=\"hint\" style=\"float:right\">タップで開閉</span></summary><div class=\"detailsbody\"><input value=\"${esc(e.title)}\" oninput=\"editE(${i},'title',this.value)\"><label>種類</label><select onchange=\"editE(${i},'type',this.value)\">${['証拠','発言','推理','疑問','その他'].map(x=>`<option ${x===e.type?'selected':''}>${x}</option>`).join('')}</select><label>内容</label><textarea oninput=\"editE(${i},'content',this.value)\">${esc(e.content)}</textarea><label>関連人物・場所・時刻</label><input value=\"${esc(e.related)}\" oninput=\"editE(${i},'related',this.value)\"><label>情報源</label><input value=\"${esc(e.source)}\" oninput=\"editE(${i},'source',this.value)\"><label>確度</label><input value=\"${esc(e.certainty)}\" oninput=\"editE(${i},'certainty',this.value)\"><button class=\"danger\" onclick=\"current.evidence.splice(${i},1);save();renderEvidence()\">削除</button></div>`;g.appendChild(d)})}"
+          new = "function renderEvidence(){let g=document.getElementById('evidenceList');g.innerHTML='';if(!current.evidence.length){g.innerHTML='<div class=\"empty\">「＋ メモを追加」から追加してください。</div>';return}current.evidence.forEach((e,i)=>{if(typeof e.contentOpen!=='boolean')e.contentOpen=true;let d=document.createElement('details');d.open=!!e.open;d.ontoggle=()=>{e.open=d.open;save()};d.innerHTML=`<summary><span class=\"badge\">${esc(e.type)}</span> ${esc(e.title)} <span class=\"hint\" style=\"float:right\">タップで開閉</span></summary><div class=\"detailsbody\"><input value=\"${esc(e.title)}\" oninput=\"editE(${i},'title',this.value)\"><label>種類</label><select onchange=\"editE(${i},'type',this.value)\">${['証拠','発言','推理','疑問','その他'].map(x=>`<option ${x===e.type?'selected':''}>${x}</option>`).join('')}</select><details class=\"evidence-content-fold\" ${e.contentOpen?'open':''}><summary><span>内容</span><span class=\"hint\" style=\"float:right\">タップで開閉</span></summary><div class=\"detailsbody\"><textarea oninput=\"editE(${i},'content',this.value)\">${esc(e.content)}</textarea></div></details><label>関連人物・場所・時刻</label><input value=\"${esc(e.related)}\" oninput=\"editE(${i},'related',this.value)\"><label>情報源</label><input value=\"${esc(e.source)}\" oninput=\"editE(${i},'source',this.value)\"><label>確度</label><input value=\"${esc(e.certainty)}\" oninput=\"editE(${i},'certainty',this.value)\"><button class=\"danger\" onclick=\"current.evidence.splice(${i},1);save();renderEvidence()\">削除</button></div>`;let cf=d.querySelector('.evidence-content-fold');if(cf)cf.ontoggle=()=>{e.contentOpen=cf.open;save()};g.appendChild(d)})}"
+          if old not in s:
+              raise SystemExit('anchor 2 not found')
+          s = s.replace(old, new, 1)
+          p.write_text(s, encoding='utf-8')
+          PY
+      - name: Commit patched index.html
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html
+          git diff --cached --quiet || git commit -m '推理メモの内容を折りたたみ可能にする'
+          git push
